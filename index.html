@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FINN — the brief that ends</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0f12;--card:#161a1f;--line:#252b33;--tx:#e8ebef;--mu:#8a94a3;--up:#3ecf8e;--dn:#ff6b6b;--warn:#f5b84b;--acc:#7aa2ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#05060a;font-family:Inter,system-ui,sans-serif;color:var(--tx);display:flex;justify-content:center}
+.app{width:100%;max-width:430px;min-height:100vh;background:var(--bg);padding:0 16px 96px;position:relative}
+.sample{font-size:11px;color:var(--warn);background:#2a2110;border:1px solid #4a3a18;padding:6px 10px;border-radius:8px;margin:12px 0 0}
+header{padding:16px 0 8px}
+.hi{font-size:13px;color:var(--mu)}
+h1{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.count{font-size:14px;color:var(--mu);margin-top:6px}.count b{color:var(--tx)}
+.win{display:flex;gap:6px;margin:14px 0 4px}
+.win button{flex:1;background:var(--card);border:1px solid var(--line);color:var(--mu);font:500 12px Inter;padding:8px 0;border-radius:999px}
+.win button.on{color:var(--tx);border-color:var(--acc)}
+.sec{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:22px 0 8px;display:flex;justify-content:space-between}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;transition:opacity .25s,transform .25s}
+.card.gone{opacity:0;transform:translateX(40px);height:0;padding:0;margin:0;border:0;overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sym{font-weight:700;font-size:15px}
+.tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:3px 7px;border-radius:6px;background:#1f2633;color:var(--acc)}
+.tag.r{background:#2c1a1a;color:var(--dn)}.tag.g{background:#13261d;color:var(--up)}.tag.y{background:#2a2110;color:var(--warn)}
+.what{font-size:14px;margin:8px 0 2px;line-height:1.4}
+.so{font-size:13px;color:var(--mu);line-height:1.45}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px}
+th{color:var(--mu);font-weight:500;text-align:right;padding:4px 0}th:first-child,td:first-child{text-align:left}
+td{text-align:right;padding:5px 0;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12px}
+.u{color:var(--up)}.d{color:var(--dn)}
+.bio{display:flex;gap:10px;margin-top:10px;padding:10px;background:#11151a;border-radius:10px}
+.av{width:36px;height:36px;border-radius:50%;background:#2a3140;display:grid;place-items:center;font-weight:600;font-size:13px;flex-shrink:0}
+.bio p{font-size:12.5px;color:var(--mu);line-height:1.4}.bio b{color:var(--tx);font-weight:600}
+.acts{display:flex;gap:8px;margin-top:12px}
+.acts button{background:none;border:1px solid var(--line);color:var(--mu);font:500 12px Inter;padding:6px 10px;border-radius:8px}
+.why{font-size:11px;color:var(--mu);margin-top:8px;font-style:italic}
+.routine{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--mu)}
+.routine summary{cursor:pointer;list-style:none}.routine li{list-style:none;padding:6px 0;border-top:1px solid var(--line);font-size:12px}
+.done{text-align:center;padding:28px 0 8px;color:var(--mu);font-size:13px}.done b{display:block;color:var(--tx);font-size:16px;margin-bottom:4px}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;display:flex;background:rgba(13,15,18,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+nav button{flex:1;background:none;border:0;color:var(--mu);font:500 12px Inter;padding:14px 0 18px}nav button.on{color:var(--tx)}
+.view{display:none}.view.on{display:block}
+.ask{display:flex;gap:8px;margin-top:14px}
+.ask input{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px;color:var(--tx);font:14px Inter}
+.ask button{background:var(--acc);border:0;border-radius:10px;padding:0 14px;font:600 13px Inter;color:#0b0d10}
+.score{display:flex;gap:6px;margin:14px 0}
+.score div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 0;text-align:center}
+.score b{display:block;font-size:20px}.score span{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+.verdict{background:#11151a;border-left:3px solid var(--warn);padding:12px;border-radius:0 10px 10px 0;font-size:13.5px;line-height:1.5}
+.claim .so q{font-style:italic;color:#b8c0cc}
+.src{font-size:11px;color:var(--acc);margin-top:6px}
+.set label{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.set input[type=range]{width:140px}.set small{color:var(--mu);display:block;font-size:12px}
+.chip{display:inline-block;font-size:12px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;margin:4px 4px 0 0;color:var(--mu)}.chip.on{border-color:var(--acc);color:var(--tx)}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="sample">Design prototype with illustrative sample data, not real filings or figures. The repo's backend produces the live version of each card.</div>
+
+<!-- ============ BRIEF (PUSH) ============ -->
+<section class="view on" id="v-brief">
+<header>
+  <div class="hi">Mon, 7:40 am · 18 holdings</div>
+  <h1>3 things need you today.</h1>
+  <div class="count"><b>41</b> filings in your window. <b>38</b> handled quietly.</div>
+  <div class="win" id="win">
+    <button data-h="8">Since close</button><button class="on" data-h="24">24h</button><button data-h="72">3 days</button><button data-h="168">Week</button>
+  </div>
+</header>
+
+<div class="sec"><span>Read now</span><span id="left">3 left</span></div>
+
+<div class="card" data-cat="results">
+  <div class="top"><span class="sym">DIXON</span><span class="tag g">Results · Q2</span></div>
+  <div class="what">Revenue up sharply YoY, but EBITDA margin slipped for the second straight quarter.</div>
+  <table>
+    <tr><th></th><th>Q2</th><th>QoQ</th><th>YoY</th></tr>
+    <tr><td>Revenue</td><td>11,530</td><td class="u">+12.4%</td><td class="u">+41.0%</td></tr>
+    <tr><td>EBITDA</td><td>445</td><td class="u">+6.1%</td><td class="u">+28.3%</td></tr>
+    <tr><td>PBT</td><td>352</td><td class="u">+4.8%</td><td class="u">+30.9%</td></tr>
+    <tr><td>PAT</td><td>262</td><td class="d">−3.2%</td><td class="u">+24.1%</td></tr>
+  </table>
+  <div class="so" style="margin-top:8px">Margin 3.9% vs 4.1% last quarter. This tests the "4%+ margin" guidance from the Q4 call. <a href="#ledger" style="color:var(--acc)">See ledger →</a></div>
+  <div class="why">Why first: results, a guided metric moved against guidance. ₹ crore, consolidated.</div>
+  <div class="acts"><button class="dn">Done</button><button>Open filing</button><button class="mute">Less like this</button></div>
+</div>
+
+<div class="card" data-cat="management_change">
+  <div class="top"><span class="sym">POLYCAB</span><span class="tag y">CFO change</span></div>
+  <div class="what">CFO steps down after 6 years. Successor named, effective 1 Dec.</div>
+  <div class="bio"><div class="av">AK</div><p><b>Incoming: A. Kumar</b><br>Ex-Deputy CFO at a large-cap FMCG company · 14 yrs in treasury and capital markets · CA. Moving from a CFO-in-waiting role, so this looks like a planned successor, not a scramble.</p></div>
+  <div class="why">Why: top-level change. The bio is pulled from public professional profiles.</div>
+  <div class="acts"><button class="dn">Done</button><button>Open filing</button><button class="mute">Less like this</button></div>
+</div>
+
+<div class="card" data-cat="eod">
+  <div class="top"><span class="sym">CDSL</span><span class="tag r">Unusual move</span></div>
+  <div class="what">−5.8% on 3.4× its 20-day volume. No filing explains it.</div>
+  <div class="so">Your thresholds: ±4% or 2× volume. A move with no announcement behind it is the one worth a look.</div>
+  <div class="acts"><button class="dn">Done</button><button>Chart</button><button class="mute">Raise threshold</button></div>
+</div>
+
+<div class="done" id="done" style="display:none"><b>You're done.</b>Nothing else in your window needs you. FINN will interrupt if something crosses a line you set.</div>
+
+<div class="sec"><span>Glance</span><span>one line each</span></div>
+<div class="card"><div class="top"><span class="sym">LT</span><span class="tag">Order win</span></div><div class="so" style="margin-top:6px">"Significant" order (₹1–2.5k cr band) in power transmission, Middle East.</div></div>
+<div class="card"><div class="top"><span class="sym">TITAN</span><span class="tag">Rating</span></div><div class="so" style="margin-top:6px">AAA reaffirmed, outlook stable. No change.</div></div>
+
+<details class="routine"><summary>▸ 36 routine filings, collapsed</summary>
+<ul><li>ITC · Trading window closure</li><li>INFY · ESOP allotment (Reg 74)</li><li>TCS · Investor meeting schedule ×3</li><li>HDFCBANK · Newspaper publication</li><li>… 32 more · nothing that changes a position</li></ul>
+</details>
+</section>
+
+<!-- ============ RESEARCH (PULL) ============ -->
+<section class="view" id="v-ledger">
+<header>
+  <div class="hi">Research · primary sources only</div>
+  <h1>Promise Ledger</h1>
+  <div class="count">What management guided vs what it delivered. Any NSE ticker.</div>
+  <div class="ask"><input id="tk" value="DIXON" aria-label="NSE ticker"><button id="go">Run</button></div>
+</header>
+<div class="score">
+  <div><b class="u">4</b><span>Kept</span></div><div><b class="d">2</b><span>Missed</span></div><div><b style="color:var(--warn)">1</b><span>Restated</span></div><div><b style="color:var(--mu)">1</b><span>Dropped</span></div>
+</div>
+<div class="verdict"><b>Verdict.</b> Volume and revenue guidance is reliable and usually beaten. Margin guidance is where management over-promises: it was missed twice and quietly reframed from "4%+" to "about 4%" in the latest call.</div>
+
+<div class="sec"><span>Claims · last 4 calls</span><span>tap to source</span></div>
+<div class="card claim"><div class="top"><span class="sym">EBITDA margin · FY26</span><span class="tag y">Restated</span></div>
+<div class="so" style="margin-top:6px">Q4FY25: <q>sustain 4%+ through the year</q> → Q2FY26: <q>around 4%, mix-dependent</q><br>Delivered: 4.1% → 3.9%</div><div class="src">Q4FY25 transcript p.7 · Q2FY26 transcript p.11</div></div>
+<div class="card claim"><div class="top"><span class="sym">Revenue growth · FY26</span><span class="tag g">Kept</span></div>
+<div class="so" style="margin-top:6px">Guided <q>at least 30% growth</q>. Delivered 41% YoY in H1.</div><div class="src">Q4FY25 transcript p.4 · Q2FY26 results p.2</div></div>
+<div class="card claim"><div class="top"><span class="sym">New plant commissioning</span><span class="tag r">Missed</span></div>
+<div class="so" style="margin-top:6px">Guided <q>operational by Q1</q>. Now said to be Q3.</div><div class="src">Q3FY25 transcript p.9 · Q2FY26 transcript p.6</div></div>
+<div class="card claim"><div class="top"><span class="sym">Net-debt free by FY26</span><span class="tag" style="color:var(--mu)">Dropped</span></div>
+<div class="so" style="margin-top:6px">Said once in Q3FY25. Never mentioned in the next three calls.</div><div class="src">Q3FY25 transcript p.12</div></div>
+</section>
+
+<!-- ============ RULES ============ -->
+<section class="view set" id="v-rules">
+<header><div class="hi">You decide what "unusual" means</div><h1>Rules</h1></header>
+<label><span>Price move<small>Alert if one-day move beyond</small></span><span><input type="range" min="1" max="10" value="4" id="pm"> <b id="pmv">±4%</b></span></label>
+<label><span>Volume spike<small>vs 20-day average</small></span><span><input type="range" min="1.5" max="5" step=".5" value="2" id="vm"> <b id="vmv">2×</b></span></label>
+<div class="sec"><span>Interrupt me for</span></div>
+<div id="chips"></div>
+<div class="sec"><span>Learned from you</span></div>
+<div class="so" id="learned">Nothing yet. Tap "Less like this" on a card and FINN will downrank that kind of filing, and show you here that it did.</div>
+</section>
+
+<nav><button class="on" data-v="brief">Brief</button><button data-v="ledger">Research</button><button data-v="rules">Rules</button></nav>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+function show(v){$$('.view').forEach(e=>e.classList.toggle('on',e.id==='v-'+v));$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));scrollTo(0,0)}
+$$('nav button').forEach(b=>b.onclick=()=>{show(b.dataset.v);location.hash=b.dataset.v});
+addEventListener('hashchange',()=>show(location.hash.slice(1)||'brief'));
+if(location.hash)show(location.hash.slice(1));
+function left(){const n=$$('#v-brief .card[data-cat]:not(.gone)').length;$('#left').textContent=n+' left';$('h1').textContent=n?`${n} thing${n>1?'s':''} need${n>1?'':'s'} you today.`:'All clear.';$('#done').style.display=n?'none':'block'}
+const learned=[];
+$$('.dn,.mute').forEach(b=>b.onclick=()=>{const c=b.closest('.card');if(b.classList.contains('mute')){learned.push(c.querySelector('.tag').textContent);$('#learned').innerHTML=learned.map(l=>`<span class="chip on">↓ ${l}</span>`).join('')}c.classList.add('gone');left()});
+$$('#win button').forEach(b=>b.onclick=()=>{$$('#win button').forEach(x=>x.classList.remove('on'));b.classList.add('on')});
+$('#pm').oninput=e=>$('#pmv').textContent='±'+e.target.value+'%';
+$('#vm').oninput=e=>$('#vmv').textContent=e.target.value+'×';
+const cats=['results','M&A','management_change','fund_raise','litigation','pledging','credit_rating','capex','dividend','insider_trading'],on=new Set(cats.slice(0,7));
+$('#chips').innerHTML=cats.map(c=>`<span class="chip ${on.has(c)?'on':''}">${c}</span>`).join('');
+$$('#chips .chip').forEach(c=>c.onclick=()=>c.classList.toggle('on'));
+$('#go').onclick=()=>{$('#go').textContent='Sample';setTimeout(()=>$('#go').textContent='Run',1200)};
+</script>
+</body>
+</html>
